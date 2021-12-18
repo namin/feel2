@@ -79,12 +79,6 @@
 <svg></svg>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
-
-body {
-  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
 :global(.selected) {
   font-weight: bold;
 }
