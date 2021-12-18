@@ -42,16 +42,17 @@
         .innerRadius(function (d) { return d.depth == 0 ? 0 : (d.depth -1) * bandSize })
         .outerRadius(function (d) { return d.depth == 0 ? 0 : d.depth * bandSize });
 
-    // Add a <g> element for each node in thd data, then append <path> elements and draw lines based on the arc
+    // Add a <g> element for each node in the data, then append <path> elements and draw lines based on the arc
     // variable calculations. Last, color the lines and the slices.
     g.selectAll('g')
       .data(root.descendants())
-      .enter().append('g').attr("class", "node").append('path')
+      .enter().append('g').attr("class", "node")
+      .attr("id", function (d) { return d.data.id; })
+      .append('path')
       .attr("display", function (d) { return d.depth ? null : "none"; })
       .attr("d", arc)
       .style("stroke", "black")
       .style("fill", function (d) { return d.data.color; })
-      .attr("id", function (d) { return d.data.id; })
       .each(function (d) {
         var id = d.data.id;
         var selNode = this.parentNode;
