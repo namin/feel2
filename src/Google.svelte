@@ -35,6 +35,7 @@
   }
 
   let email;
+  $: signedIn = !!email;
   /**
    *  Called when the signed in status changes, to update the UI
    *  appropriately. After a sign-in, the API is called.
@@ -49,10 +50,34 @@
     }
   }
 
+  /**
+   *  Sign in the user upon button click.
+   */
+  function handleAuthClick(event) {
+    gapi.auth2.getAuthInstance().signIn();
+  }
+
+  /**
+   *  Sign out the user upon button click.
+   */
+  function handleSignoutClick(event) {
+    gapi.auth2.getAuthInstance().signOut();
+  }
+
   onMount(() => {
     gapi.load('client:auth2', initClient);
   })
-
 </script>
 
-<p>...</p>
+{#if signedIn}
+  <button on:click={handleSignoutClick}>Sign out</button>
+  <!--button>Record</button-->
+{:else}
+  <button on:click={handleAuthClick}>Sign in</button>
+{/if}
+
+<style>
+  button {
+    display: block;
+  }
+</style>
