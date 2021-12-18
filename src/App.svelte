@@ -15,14 +15,11 @@
    */
   function computeTextRotation(d) {
     var angle = (d.x0 + d.x1) / Math.PI * 90;
-
-    // Avoid upside-down labels
-    //return (angle < 120 || angle > 270) ? angle : angle + 180;  // labels as rims
-    return (angle < 180) ? angle - 90 : angle + 90;  // labels as spokes
+    return (angle < 180) ? angle - 90 : angle + 90;
   }
 
   onMount(() => {
-        // Size our <svg> element, add a <g> element, and move translate 0,0 to the center of the element.
+    // Size our <svg> element, add a <g> element, and move translate 0,0 to the center of the element.
     var g = d3.select('svg')
         .attr('width', width)
         .attr('height', height)
@@ -68,7 +65,6 @@
       .append("text")
       .attr("transform", function(d) {
         return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
-    // .attr("dx", function(d) { return -d.depth * 22} ) // radius margin
       .attr("dy", ".5em") // rotation align
       .text(function(d) { return d.parent ? d.data.name : "" })
       .style("text-anchor", "middle")
