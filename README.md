@@ -25,7 +25,7 @@ To run the app locally:
 vite
 ```
 
-The app is hosted on [vercel](https://vercel.com/).
+The app is hosted on [Vercel](https://vercel.com/).
 
 ### Pain points
 
