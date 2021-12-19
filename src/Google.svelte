@@ -39,6 +39,8 @@
    *  appropriately. After a sign-in, the API is called.
    */
   function updateSigninStatus(isSignedIn) {
+    past = [];
+    say('');
     if (isSignedIn) {
       var auth2 = gapi.auth2.getAuthInstance();
       var profile = auth2.currentUser.get().getBasicProfile();
@@ -254,13 +256,13 @@
   <button on:click={handleSignoutClick}>Sign out</button>
   <button on:click={handleHistoryClick}>History</button>
   <button on:click={handleRecordClick}>Record</button>
-  <div>
-    <em>{@html sayhtml}</em>
-  </div>
 {:else}
   <button on:click={handleAuthClick}>Sign in</button>
   <button on:click={handleHistoryDemoClick}>History (Demo)</button>
 {/if}
+<div>
+  <em>{@html sayhtml}</em>
+</div>
 <pre>
   {logtext}
 </pre>
