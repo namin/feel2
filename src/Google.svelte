@@ -227,7 +227,11 @@
     if (response.status == 404) {
       say('Error: not found');
     } else {
-      say('Error: ' + response.result.error.message);
+      if (response.result && response.result.error) {
+        say('Error: ' + response.result.error.message);
+      } else {
+        say('Error');
+      }
     }
   }
 
