@@ -274,13 +274,13 @@
 </div>
 
 <div class="next">
-  <ul>
+  <ol>
   {#each past as line, i}
     {#if i>0}
-      <li><button on:click={handleLineClick(i)}>{pad2(' ',i)} &mdash; {formatDate(line[1])}</button></li>
+      <li><button class="line" on:click={handleLineClick(i)}>{formatDate(line[1])}</button></li>
     {/if}
   {/each}
-  </ul>
+  </ol>
 </div>
 
 </div>
@@ -293,5 +293,10 @@
     font-size: 1.2em;
     margin: 0.5em;
     display: block;
+  }
+  button.line {
+    max-width: max-content;
+    min-width: 33ch;
+    text-align: left;
   }
 </style>
