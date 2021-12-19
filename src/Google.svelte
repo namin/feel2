@@ -230,7 +230,7 @@
       if (response.result && response.result.error) {
         say('Error: ' + response.result.error.message);
       } else {
-        say('Error');
+        say('Error with Google API');
       }
     }
   }
