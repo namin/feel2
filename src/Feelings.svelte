@@ -29,7 +29,6 @@
         let id = d.data.id;
         if (id) {
           var selNode = this;
-          console.log(selNode);
           if (line[j] == '0') {
             selNode.classList.remove("selected")
           } else {
@@ -70,7 +69,7 @@
         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
     // Create our sunburst data structure and size it.
-    var partition = d3.partition()
+    const partition = d3.partition()
         .size([2 * Math.PI, radius]);
 
     // Find the root node of our data, and begin sizing process.
@@ -79,7 +78,7 @@
 
     // Calculate the sizes of each arc that we'll draw later.
     partition(root);
-    var arc = d3.arc()
+    const arc = d3.arc()
         .startAngle(function (d) { return d.x0 })
         .endAngle(function (d) { return d.x1})
         .innerRadius(function (d) { return d.depth == 0 ? 0 : (d.depth -1) * bandSize })
