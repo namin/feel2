@@ -267,13 +267,13 @@
   {logtext}
 </pre>
 
-<div class="static">
+<div>
 
-<div class="absolute left-0">
+<div class="next">
 <Feelings/>
 </div>
 
-<div class="absolute right-0">
+<div class="next">
   <ul>
   {#each past as line, i}
     {#if i>0}
@@ -286,7 +286,12 @@
 </div>
 
 <style>
+  div.next {
+    float: left;
+  }
   button {
+    font-size: 1.2em;
+    margin: 0.5em;
     display: block;
   }
 </style>

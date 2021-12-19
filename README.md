@@ -7,14 +7,12 @@ Please [email me](mailto:namin@alum.mit.edu) if you want to be a beta tester for
 ## Tech
 
 - Svelte (just [learning](https://svelte.dev/tutorial/), fun!)
-- Tailwind (still don't get it)
 - D3.js to draw the wheel, based on [chriseyre2000/FeelingWheel](https://github.com/chriseyre2000/FeelingWheel)
 - Google API (all client-side!)
 
 FYI, the command to generate the template for the app was
 ```
 npm init vite@latest feel -- --template svelte-ts
-npx svelte-add@latest tailwindcss
 ```
 
 To install the app locally:
