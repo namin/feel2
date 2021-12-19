@@ -216,7 +216,13 @@
   {logtext}
 </pre>
 
-<div>
+<div class="static">
+
+<div class="absolute left-0">
+<Feelings/>
+</div>
+
+<div class="absolute right-0">
   <ul>
   {#each past as line, i}
     {#if i>0}
@@ -225,7 +231,8 @@
   {/each}
   </ul>
 </div>
-<Feelings/>
+
+</div>
 
 <style>
   button {
