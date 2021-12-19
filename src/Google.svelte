@@ -226,7 +226,7 @@
   <ul>
   {#each past as line, i}
     {#if i>0}
-      <li>{pad2(' ',i)} -- {formatDate(line[1])}</li>
+      <li>{pad2(' ',i)} &mdash; {formatDate(line[1])}</li>
     {/if}
   {/each}
   </ul>
