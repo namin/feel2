@@ -29,10 +29,7 @@
 
       // Handle the initial sign-in state.
       updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-    }, function(error) {
-      log('initClient()')
-      log(JSON.stringify(error, null, 2));
-    });
+    }, errorFun);
   }
 
   let email;
@@ -72,6 +69,7 @@
     }
     return str;
   }
+
   function formatDate(d) {
     const date = new Date(parseInt(d));
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -80,17 +78,32 @@
     s += ' '+hour+':'+pad2('0', minutes)
     return s
   }
+
   var past = [];
   function handleHistoryClick(event) {
-    var spreadsheetId = '1x6EbOm_QThPRA3fH7OMm0lZeZcbwxOxSDsOEepgh0gI';
-    gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: spreadsheetId,
-      range: 'Sheet1',
-    }).then(function(response) {
-      var range = response.result;
-      past = range.values;
-    }, function(response) {
-      log('Error: ' + response.result.error.message);
+    gapi.client.drive.files.list({
+      q: 'name="spreadsheet.json"',
+      spaces: 'appDataFolder',
+      fields: 'files(id)'
+    }).then(function (response) {
+      if (!response.result.files || response.result.files.length == 0) {
+        say('no history');
+      } else {
+        var fileId = response.result.files[0].id;
+        gapi.client.drive.files.get({
+          fileId: fileId,
+          alt: 'media'
+        }).then(function (response) {
+          const spreadsheetId = response.result.spreadsheetId;
+          gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: spreadsheetId,
+            range: 'Sheet1',
+          }).then(function(response) {
+            var range = response.result;
+            past = range.values;
+          }, errorFun);
+        }, errorFun);
+      }
     });
   }
 
@@ -103,10 +116,6 @@
   }
 
   function handleRecordClick(event) {
-    record();
-  }
-
-  function record() {
     say('recording in progress...');
     gapi.client.drive.files.list({
       q: 'name="spreadsheet.json"',
@@ -137,9 +146,9 @@
               body: JSON.stringify({spreadsheetId: spreadsheetId})
             }).then(function (response) {
               insertRows(spreadsheetId, [listHeader(), listState()])
-            });
-          })
-        })
+            }, errorFun);
+          }, errorFun)
+        }, errorFun)
       } else {
         var fileId = response.result.files[0].id;
         gapi.client.drive.files.get({
@@ -148,9 +157,9 @@
         }).then(function (response) {
           var spreadsheetId = response.result.spreadsheetId;
           insertRows(spreadsheetId, [listState()])
-        });
+        }, errorFun);
       }
-    });
+    }, errorFun);
   }
 
   function spreadsheelUrl(spreadsheetId) {
@@ -174,8 +183,9 @@
         log('spreadsheet not found!')
         record();
       } else {
-        log('insertRow('+spreadsheetId+', ...)');
-        log(JSON.stringify(error, null, 2));
+        log('Error: ' + error.result.error.message);
+        console.log('insertRow('+spreadsheetId+', ...)');
+        console.log(JSON.stringify(error, null, 2));
       }
     });
   }
@@ -187,6 +197,11 @@
   function listState(spreadsheetId) {
     let current = currentFeelings();
     return [Date(), Date.now(), ...current];
+  }
+
+  function errorFun(error) {
+    say('Error: ' + error.result.error.message);
+    console.log(JSON.stringify(error, null, 2));
   }
 
   let logtext = '';
