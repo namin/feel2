@@ -6,4 +6,3 @@
 <h1>The Feeling Wheel</h1>
 
 <Google/>
-<Feelings/>

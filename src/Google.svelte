@@ -1,6 +1,6 @@
-<script lang="ts">
+<script>
   import { onMount } from 'svelte';
-  import { currentFeelings, feelingsIds } from './Feelings.svelte';
+  import Feelings, { currentFeelings, feelingsIds } from './Feelings.svelte';
 
   // Client ID and API key from the Developer Console
   var CLIENT_ID = '45515854863-6imu2cteovr1j804j404auhh70nmlihh.apps.googleusercontent.com';
@@ -63,6 +63,38 @@
    */
   function handleSignoutClick(event) {
     gapi.auth2.getAuthInstance().signOut();
+  }
+
+  function pad2(indent, x) {
+    var str = ''+x
+    if (str.length == 1) {
+      str = indent+str;
+    }
+    return str;
+  }
+  function formatDate(d) {
+    const date = new Date(parseInt(d));
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    var s = date.toLocaleDateString(undefined, options);
+    const [hour, minutes] = [date.getHours(), date.getMinutes()];
+    s += ' '+hour+':'+pad2('0', minutes)
+    return s
+  }
+  var past = [];
+  function handleHistoryClick(event) {
+    var spreadsheetId = '1x6EbOm_QThPRA3fH7OMm0lZeZcbwxOxSDsOEepgh0gI';
+    gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: 'Sheet1',
+    }).then(function(response) {
+      var range = response.result;
+      for (var i=1; i<range.values.length; i++) {
+        log(pad2(' ',i) + " -- " + formatDate(range.values[i][1]));
+      }
+      past = range.values;
+    }, function(response) {
+      log('Error: ' + response.result.error.message);
+    });
   }
 
   function handleRecordClick(event) {
@@ -175,9 +207,10 @@
 
 {#if signedIn}
   <button on:click={handleSignoutClick}>Sign out</button>
+  <button on:click={handleHistoryClick}>History</button>
   <button on:click={handleRecordClick}>Record</button>
   <div>
-    {@html sayhtml}
+    <em>{@html sayhtml}</em>
   </div>
 {:else}
   <button on:click={handleAuthClick}>Sign in</button>
@@ -185,6 +218,8 @@
 <pre>
   {logtext}
 </pre>
+
+<Feelings/>
 
 <style>
   button {
