@@ -79,21 +79,29 @@
     return s
   }
 
-  var past = [];
-  function handleHistoryClick(event) {
-    gapi.client.drive.files.list({
+  function fetchFiles() {
+    return gapi.client.drive.files.list({
       q: 'name="spreadsheet.json"',
       spaces: 'appDataFolder',
       fields: 'files(id)'
-    }).then(function (response) {
+    })
+  }
+
+  function fetchSpreadsheetId(fileId) {
+    return gapi.client.drive.files.get({
+          fileId: fileId,
+          alt: 'media'
+        })
+  }
+
+  var past = [];
+  function handleHistoryClick(event) {
+    fetchFiles().then(function (response) {
       if (!response.result.files || response.result.files.length == 0) {
         say('no history');
       } else {
         var fileId = response.result.files[0].id;
-        gapi.client.drive.files.get({
-          fileId: fileId,
-          alt: 'media'
-        }).then(function (response) {
+        fetchSpreadsheetId(fileId).then(function (response) {
           const spreadsheetId = response.result.spreadsheetId;
           gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: spreadsheetId,
@@ -115,46 +123,51 @@
     };
   }
 
+  function createSpreadsheet() {
+    return gapi.client.sheets.spreadsheets.create({
+      properties: {
+        title: "feel.metareflection.club"
+      }
+    });
+  }
+
+  function createAddData(spreadsheetId) {
+    return gapi.client.drive.files.create({
+      resource: {
+        name: 'spreadsheet.json',
+        parents: ['appDataFolder']
+      },
+      fields: 'id'
+    })
+  }
+
+  function storeSpreadsheetId(fileId, spreadsheetId) {
+    return gapi.client.request({
+      path: '/upload/drive/v3/files/' + fileId,
+      method: 'PATCH',
+      params: {
+        uploadType: 'media'
+      },
+      body: JSON.stringify({spreadsheetId: spreadsheetId})
+    });
+  }
+
   function handleRecordClick(event) {
     say('recording in progress...');
-    gapi.client.drive.files.list({
-      q: 'name="spreadsheet.json"',
-      spaces: 'appDataFolder',
-      fields: 'files(id)'
-    }).then(function (response) {
+    fetchFiles().then(function (response) {
       if (!response.result.files || response.result.files.length == 0) {
-        gapi.client.sheets.spreadsheets.create({
-          properties: {
-            title: "feel.metareflection.club"
-          }
-        }).then((response) => {
+        createSpreadsheet().then((response) => {
           var spreadsheetId = response.result.spreadsheetId;
-          gapi.client.drive.files.create({
-            resource: {
-              name: 'spreadsheet.json',
-              parents: ['appDataFolder']
-            },
-            fields: 'id'
-          }).then(function (response) {
+          createAppData(spreadsheetId).then(function (response) {
             var fileId = response.result.id;
-            gapi.client.request({
-              path: '/upload/drive/v3/files/' + fileId,
-              method: 'PATCH',
-              params: {
-                uploadType: 'media'
-              },
-              body: JSON.stringify({spreadsheetId: spreadsheetId})
-            }).then(function (response) {
+            storeSpreadsheetId(fileId, spreadsheetId).then(function (response) {
               insertRows(spreadsheetId, [listHeader(), listState()])
             }, errorFun);
           }, errorFun)
         }, errorFun)
       } else {
         var fileId = response.result.files[0].id;
-        gapi.client.drive.files.get({
-          fileId: fileId,
-          alt: 'media'
-        }).then(function (response) {
+        fetchSpreadsheetId(fileId).then(function (response) {
           var spreadsheetId = response.result.spreadsheetId;
           insertRows(spreadsheetId, [listState()])
         }, errorFun);
@@ -178,14 +191,14 @@
       values: values
     }).then((response) => {
       say('recorded on '+formatDate(values[values.length-1][1])+' to <a href="'+spreadsheelUrl(spreadsheetId)+'" target="_blank">spreadsheet</a>')
-    }, function(error) {
-      if (error.result.error.code == 404) {
+    }, function(response) {
+      if (response.result.error.code == 404) {
         log('spreadsheet not found!')
         record();
       } else {
-        log('Error: ' + error.result.error.message);
+        log('Error: ' + response.result.error.message);
         console.log('insertRow('+spreadsheetId+', ...)');
-        console.log(JSON.stringify(error, null, 2));
+        console.log(JSON.stringify(response, null, 2));
       }
     });
   }
@@ -198,9 +211,13 @@
     return [Date(), Date.now(), ...currentFeelings()];
   }
 
-  function errorFun(error) {
-    say('Error: ' + error.result.error.message);
-    console.log(JSON.stringify(error, null, 2));
+  function errorFun(response) {
+    console.log(JSON.stringify(response, null, 2));
+    if (response.status == 404) {
+      say('Error: not found');
+    } else {
+      say('Error: ' + response.result.error.message);
+    }
   }
 
   let logtext = '';
