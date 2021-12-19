@@ -81,7 +81,7 @@
 
   function fetchFiles() {
     return gapi.client.drive.files.list({
-      q: 'name="spreadsheet.json"',
+      q: 'name="feel.json"',
       spaces: 'appDataFolder',
       fields: 'files(id)'
     })
@@ -95,6 +95,16 @@
   }
 
   var past = [];
+  function populateHistory(spreadsheetId) {
+    gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: 'Sheet1',
+    }).then(function(response) {
+      var range = response.result;
+      past = range.values;
+    }, errorFun);
+  }
+
   function handleHistoryClick(event) {
     fetchFiles().then(function (response) {
       if (!response.result.files || response.result.files.length == 0) {
@@ -103,16 +113,15 @@
         var fileId = response.result.files[0].id;
         fetchSpreadsheetId(fileId).then(function (response) {
           const spreadsheetId = response.result.spreadsheetId;
-          gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: spreadsheetId,
-            range: 'Sheet1',
-          }).then(function(response) {
-            var range = response.result;
-            past = range.values;
-          }, errorFun);
+          populateHistory(spreadsheetId);
         }, errorFun);
       }
     });
+  }
+
+  function handleHistoryDemoClick(event) {
+    const spreadsheetId = '1vA8HisdlQW7msL-cPIkDeZPCltDwcVvbc0j9UIX-Z_M';
+    populateHistory(spreadsheetId);
   }
 
   function handleLineClick(i) {
@@ -126,15 +135,15 @@
   function createSpreadsheet() {
     return gapi.client.sheets.spreadsheets.create({
       properties: {
-        title: "feel.metareflection.club"
+        title: "feel.reflective.ink"
       }
     });
   }
 
-  function createAddData(spreadsheetId) {
+  function createAppData(spreadsheetId) {
     return gapi.client.drive.files.create({
       resource: {
-        name: 'spreadsheet.json',
+        name: 'feel.json',
         parents: ['appDataFolder']
       },
       fields: 'id'
@@ -250,6 +259,7 @@
   </div>
 {:else}
   <button on:click={handleAuthClick}>Sign in</button>
+  <button on:click={handleHistoryDemoClick}>History (Demo)</button>
 {/if}
 <pre>
   {logtext}
