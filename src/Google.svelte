@@ -88,9 +88,6 @@
       range: 'Sheet1',
     }).then(function(response) {
       var range = response.result;
-      for (var i=1; i<range.values.length; i++) {
-        log(pad2(' ',i) + " -- " + formatDate(range.values[i][1]));
-      }
       past = range.values;
     }, function(response) {
       log('Error: ' + response.result.error.message);
@@ -219,6 +216,15 @@
   {logtext}
 </pre>
 
+<div>
+  <ul>
+  {#each past as line, i}
+    {#if i>0}
+      <li>{pad2(' ',i)} -- {formatDate(line[1])}</li>
+    {/if}
+  {/each}
+  </ul>
+</div>
 <Feelings/>
 
 <style>
