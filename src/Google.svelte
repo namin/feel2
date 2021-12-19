@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
+  import { currentFeelings, feelingsIds } from './Feelings.svelte';
 
   // Client ID and API key from the Developer Console
   var CLIENT_ID = '45515854863-6imu2cteovr1j804j404auhh70nmlihh.apps.googleusercontent.com';
@@ -29,8 +30,8 @@
       // Handle the initial sign-in state.
       updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
     }, function(error) {
-      console.log('initClient()')
-      console.log(JSON.stringify(error, null, 2));
+      log('initClient()')
+      log(JSON.stringify(error, null, 2));
     });
   }
 
@@ -64,6 +65,109 @@
     gapi.auth2.getAuthInstance().signOut();
   }
 
+  function handleRecordClick(event) {
+    record();
+  }
+
+  function record() {
+    say('recording in progress...');
+    gapi.client.drive.files.list({
+      q: 'name="spreadsheet.json"',
+      spaces: 'appDataFolder',
+      fields: 'files(id)'
+    }).then(function (response) {
+      if (!response.result.files || response.result.files.length == 0) {
+        gapi.client.sheets.spreadsheets.create({
+          properties: {
+            title: "feel.metareflection.club"
+          }
+        }).then((response) => {
+          var spreadsheetId = response.result.spreadsheetId;
+          gapi.client.drive.files.create({
+            resource: {
+              name: 'spreadsheet.json',
+              parents: ['appDataFolder']
+            },
+            fields: 'id'
+          }).then(function (response) {
+            var fileId = response.result.id;
+            gapi.client.request({
+              path: '/upload/drive/v3/files/' + fileId,
+              method: 'PATCH',
+              params: {
+                uploadType: 'media'
+              },
+              body: JSON.stringify({spreadsheetId: spreadsheetId})
+            }).then(function (response) {
+              insertRows(spreadsheetId, [listHeader(), listState()])
+            });
+          })
+        })
+      } else {
+        var fileId = response.result.files[0].id;
+        gapi.client.drive.files.get({
+          fileId: fileId,
+          alt: 'media'
+        }).then(function (response) {
+          var spreadsheetId = response.result.spreadsheetId;
+          insertRows(spreadsheetId, [listState()])
+        });
+      }
+    });
+  }
+
+  function spreadsheelUrl(spreadsheetId) {
+    return 'https://docs.google.com/spreadsheets/d/'+spreadsheetId+'/edit#gid=0';
+  }
+
+  function insertRows(spreadsheetId, values) {
+    gapi.client.sheets.spreadsheets.values.append({
+      spreadsheetId: spreadsheetId,
+      range: 'Sheet1',
+      valueInputOption: 'USER_ENTERED',
+      insertDataOption: 'INSERT_ROWS'
+    }, {
+      range: 'Sheet1',
+      majorDimension: 'ROWS',
+      values: values
+    }).then((response) => {
+      say('recorded on '+values[values.length-1][0]+' to <a href="'+spreadsheelUrl(spreadsheetId)+'" target="_blank">spreadsheet</a>')
+    }, function(error) {
+      if (error.result.error.code == 404) {
+        log('spreadsheet not found!')
+        record();
+      } else {
+        log('insertRow('+spreadsheetId+', ...)');
+        log(JSON.stringify(error, null, 2));
+      }
+    });
+  }
+
+  function listHeader(spreadsheetId) {
+    return ['Date', 'Date', ...feelingsIds];
+  }
+
+  function listState(spreadsheetId) {
+    let current = currentFeelings();
+    return [Date(), Date.now(), ...current];
+  }
+
+  let logtext = '';
+  /**
+   * Append a pre element to the body containing the given message
+   * as its text node. Used to display the results of the API call.
+   *
+   * @param {string} message Text to be placed in pre element.
+   */
+  function log(message) {
+    logtext += message + '\n';
+  }
+
+  let sayhtml = '';
+  function say(message) {
+    sayhtml = message;
+  }
+
   onMount(() => {
     gapi.load('client:auth2', initClient);
   })
@@ -71,10 +175,16 @@
 
 {#if signedIn}
   <button on:click={handleSignoutClick}>Sign out</button>
-  <!--button>Record</button-->
+  <button on:click={handleRecordClick}>Record</button>
+  <div>
+    {@html sayhtml}
+  </div>
 {:else}
   <button on:click={handleAuthClick}>Sign in</button>
 {/if}
+<pre>
+  {logtext}
+</pre>
 
 <style>
   button {

@@ -1,3 +1,27 @@
+<script context="module">
+  let g;
+  let root;
+  export let feelingsIds = [];
+  export function currentFeelings() {
+    var values = [];
+    g.selectAll('g')
+      .data(root.descendants())
+      .each(function (d) {
+        let id = d.data.id;
+        if (id) {
+          var selNode = this.parentNode;
+          if (selNode.classList.contains("selected")) {
+            log(id);
+            values.push(1);
+          } else {
+            values.push(0);
+          }
+        }
+      });
+    return values;
+  }
+</script>
+
 <script>
   import feelings from './feelings.ts';
   import { onMount } from 'svelte';
@@ -20,7 +44,7 @@
 
   onMount(() => {
     // Size our <svg> element, add a <g> element, and move translate 0,0 to the center of the element.
-    var g = d3.select('svg')
+    g = d3.select('svg')
         .attr('width', width)
         .attr('height', height)
         .append('g')
@@ -31,7 +55,7 @@
         .size([2 * Math.PI, radius]);
 
     // Find the root node of our data, and begin sizing process.
-    var root = d3.hierarchy(feelings)
+    root = d3.hierarchy(feelings)
         .sum(function (d) { return d.size});
 
     // Calculate the sizes of each arc that we'll draw later.
@@ -73,6 +97,16 @@
 
     g.attr("transform", "rotate(45)")
       .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
+
+    feelingsIds = [];
+    g.selectAll('g')
+      .data(root.descendants())
+      .each(function (d) {
+        let id = d.data.id;
+        if (id) {
+          feelingsIds.push(id)
+        }
+      })
   });
 </script>
 
