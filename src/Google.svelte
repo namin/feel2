@@ -195,8 +195,7 @@
   }
 
   function listState(spreadsheetId) {
-    let current = currentFeelings();
-    return [Date(), Date.now(), ...current];
+    return [Date(), Date.now(), ...currentFeelings()];
   }
 
   function errorFun(error) {
