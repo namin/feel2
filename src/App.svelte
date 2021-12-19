@@ -1,8 +1,7 @@
 <script>
   import Google from './Google.svelte';
-  import Feelings from './Feelings.svelte';
 </script>
 
-<h1>The Feeling Wheel</h1>
+<h1><a href="https://github.com/namin/feel2">The Feeling Wheel</a></h1>
 
 <Google/>
