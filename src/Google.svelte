@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import Feelings, { currentFeelings, feelingsIds } from './Feelings.svelte';
+  import Feelings, { currentFeelings, feelingsIds, setFeelings } from './Feelings.svelte';
 
   // Client ID and API key from the Developer Console
   var CLIENT_ID = '45515854863-6imu2cteovr1j804j404auhh70nmlihh.apps.googleusercontent.com';
@@ -94,6 +94,14 @@
     });
   }
 
+  function handleLineClick(i) {
+    return function(event) {
+      const line = past[i];
+      sayhtml = 'from '+formatDate(line[1]);
+      setFeelings(line);
+    };
+  }
+
   function handleRecordClick(event) {
     record();
   }
@@ -160,7 +168,7 @@
       majorDimension: 'ROWS',
       values: values
     }).then((response) => {
-      say('recorded on '+values[values.length-1][0]+' to <a href="'+spreadsheelUrl(spreadsheetId)+'" target="_blank">spreadsheet</a>')
+      say('recorded on '+formatDate(values[values.length-1][1])+' to <a href="'+spreadsheelUrl(spreadsheetId)+'" target="_blank">spreadsheet</a>')
     }, function(error) {
       if (error.result.error.code == 404) {
         log('spreadsheet not found!')
@@ -226,7 +234,7 @@
   <ul>
   {#each past as line, i}
     {#if i>0}
-      <li>{pad2(' ',i)} &mdash; {formatDate(line[1])}</li>
+      <li><button on:click={handleLineClick(i)}>{pad2(' ',i)} &mdash; {formatDate(line[1])}</button></li>
     {/if}
   {/each}
   </ul>

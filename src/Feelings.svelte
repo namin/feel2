@@ -20,6 +20,9 @@
       });
     return values;
   }
+
+  export function setFeelings(line) {
+  }
 </script>
 
 <script>
