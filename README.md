@@ -1,6 +1,6 @@
 # [feel.reflective.ink](https://feel.reflective.ink)
 
-An [app](https://feel.reflective.ink) to explore and select feelings.
+An client-side [app](https://feel.reflective.ink) to explore and select feelings.
 
 Please [email me](mailto:namin@alum.mit.edu) if you want to be a beta tester for the recording to your private Google spreadsheet.
 
