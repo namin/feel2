@@ -9,9 +9,9 @@
       .each(function (d) {
         let id = d.data.id;
         if (id) {
-          var selNode = this.parentNode;
+          const selNode = this;
           if (selNode.classList.contains("selected")) {
-            log(id);
+            console.log(id);
             values.push(1);
           } else {
             values.push(0);
@@ -22,6 +22,22 @@
   }
 
   export function setFeelings(line) {
+    var j = 2;
+    g.selectAll('g')
+      .data(root.descendants())
+      .each(function (d) {
+        let id = d.data.id;
+        if (id) {
+          var selNode = this;
+          console.log(selNode);
+          if (line[j] == '0') {
+            selNode.classList.remove("selected")
+          } else {
+            selNode.classList.add("selected")
+          }
+          j += 1;
+        }
+      });
   }
 </script>
 
