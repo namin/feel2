@@ -268,12 +268,11 @@
 
 {#if signedIn}
   <button on:click={handleSignoutClick}>Sign out</button>
-  <button on:click={handlePublicHistoryClick}>Public</button>
   <button on:click={handleHistoryClick}>History</button>
   <button on:click={handleRecordClick}>Record</button>
 {:else}
   <button on:click={handleAuthClick}>Sign in</button>
-  <button on:click={handlePublicHistoryClick}>Public</button>
+  <button on:click={handlePublicHistoryClick}>Public History</button>
 {/if}
 <div>
   <em>{@html sayhtml}</em>
