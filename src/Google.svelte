@@ -294,9 +294,9 @@
     float: left;
   }
   button {
-    font-size: 1.2em;
-    margin: 0.5em;
-    display: block;
+    display: inline-block;
+    font-size: 1.1em;
+    margin-top: 0.5em;
   }
   button.line {
     max-width: max-content;
