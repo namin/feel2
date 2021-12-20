@@ -303,4 +303,8 @@
     min-width: 33ch;
     text-align: left;
   }
+  li {
+    display: list-item;
+    list-style-position: inside;
+  }
 </style>
