@@ -106,7 +106,7 @@
     }).then(function(response) {
       var range = response.result;
       past = range.values;
-      console.log(past);
+      say('history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a>');
     }, errorFun);
   }
 
@@ -118,7 +118,7 @@
         var fileId = response.result.files[0].id;
         fetchSpreadsheetId(fileId).then(function (response) {
           const spreadsheetId = response.result.spreadsheetId;
-          say('history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a>');
+          say('fetching history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a> ...');
           populateHistory(spreadsheetId);
         }, errorFun);
       }
@@ -131,7 +131,7 @@
     if (spreadsheetId == null || spreadsheetId == '') {
       say('cancelled');
     } else {
-      say('public history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a>');
+      say('fetching history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a> ...');
       populateHistory(spreadsheetId);
     }
   }
