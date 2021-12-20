@@ -45,8 +45,10 @@
       var auth2 = gapi.auth2.getAuthInstance();
       var profile = auth2.currentUser.get().getBasicProfile();
       email = profile.getEmail();
+      say(email);
     } else {
       email = undefined;
+      say('sign in for recording');
     }
   }
 
@@ -122,6 +124,7 @@
   }
 
   function handleHistoryDemoClick(event) {
+    say('demo')
     const spreadsheetId = '1vA8HisdlQW7msL-cPIkDeZPCltDwcVvbc0j9UIX-Z_M';
     populateHistory(spreadsheetId);
   }
@@ -296,7 +299,7 @@
   button {
     display: inline-block;
     font-size: 1.1em;
-    margin-top: 0.5em;
+    margin-bottom: 0.5em;
   }
   button.line {
     max-width: max-content;
