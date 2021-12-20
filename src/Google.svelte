@@ -303,7 +303,7 @@
   }
   button.line {
     max-width: max-content;
-    min-width: 33ch;
+    min-width: 30ch;
     text-align: left;
   }
   li {
