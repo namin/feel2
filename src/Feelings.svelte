@@ -45,11 +45,6 @@
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
 
-  let width = 900;
-  let height = 900;
-  let bandSize = 150;
-  let radius = Math.min(width, height) / 2;
-
   /**
    * Calculate the correct distance to rotate each label based on its location in the sunburst.
    * @param {Node} d
@@ -60,7 +55,17 @@
     return (angle < 180) ? angle - 90 : angle + 90;
   }
 
-  onMount(() => {
+  onMount(async () => {
+    let max_width = 900;
+    let width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+    if (width > max_width) {
+      width = max_width;
+    }
+    let height = width;
+    let bandSize = 150*width/max_width;
+    let fontSize = 18*width/max_width;
+    let radius = Math.min(width, height) / 2;
+
     // Size our <svg> element, add a <g> element, and move translate 0,0 to the center of the element.
     g = d3.select('svg')
         .attr('width', width)
@@ -106,6 +111,7 @@
     // Populate the <text> elements with our data-driven titles.
     g.selectAll(".node")
       .append("text")
+      .attr("font-size", fontSize+'px')
       .attr("transform", function(d) {
         return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
       .attr("dy", ".5em") // rotation align
