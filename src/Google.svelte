@@ -106,6 +106,7 @@
     }).then(function(response) {
       var range = response.result;
       past = range.values;
+      console.log(past);
     }, errorFun);
   }
 
@@ -117,16 +118,22 @@
         var fileId = response.result.files[0].id;
         fetchSpreadsheetId(fileId).then(function (response) {
           const spreadsheetId = response.result.spreadsheetId;
+          say('history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a>');
           populateHistory(spreadsheetId);
         }, errorFun);
       }
     });
   }
 
-  function handleHistoryDemoClick(event) {
-    say('demo')
-    const spreadsheetId = '1vA8HisdlQW7msL-cPIkDeZPCltDwcVvbc0j9UIX-Z_M';
-    populateHistory(spreadsheetId);
+  function handlePublicHistoryClick(event) {
+    const defaultSpreadsheetId = '1vA8HisdlQW7msL-cPIkDeZPCltDwcVvbc0j9UIX-Z_M';
+    const spreadsheetId = prompt('public spreadsheet id', defaultSpreadsheetId);
+    if (spreadsheetId == null || spreadsheetId == '') {
+      say('cancelled');
+    } else {
+      say('public history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a>');
+      populateHistory(spreadsheetId);
+    }
   }
 
   function handleLineClick(i) {
@@ -261,11 +268,12 @@
 
 {#if signedIn}
   <button on:click={handleSignoutClick}>Sign out</button>
+  <button on:click={handlePublicHistoryClick}>Public</button>
   <button on:click={handleHistoryClick}>History</button>
   <button on:click={handleRecordClick}>Record</button>
 {:else}
   <button on:click={handleAuthClick}>Sign in</button>
-  <button on:click={handleHistoryDemoClick}>History (Demo)</button>
+  <button on:click={handlePublicHistoryClick}>Public</button>
 {/if}
 <div>
   <em>{@html sayhtml}</em>
