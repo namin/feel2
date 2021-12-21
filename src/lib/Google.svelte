@@ -1,6 +1,19 @@
+<script context="module">
+  export var initClient;
+  export var handleAuthClick;
+  export var handleSignoutClick;
+  export var handleHistoryClick;
+  export var handlePublicHistoryClick;
+  export var handleLineClick;
+  export var handleRecordClick;
+  export var resetPast;
+  export var log;
+  export var say;
+</script>
+
 <script>
-  import { onMount } from 'svelte';
-  import Feelings, { currentFeelings, feelingsIds, setFeelings } from '$lib/Feelings.svelte';
+  import Feelings, { currentFeelings, setFeelings } from '$lib/Feelings.svelte';
+  import { formatDate } from '$lib/date.ts';
 
   // Client ID and API key from the Developer Console
   var CLIENT_ID = '45515854863-6imu2cteovr1j804j404auhh70nmlihh.apps.googleusercontent.com';
@@ -17,70 +30,27 @@
    *  Initializes the API client library and sets up sign-in state
    *  listeners.
    */
-  function initClient() {
+  initClient = function(callback) { return function() {
     gapi.client.init({
       apiKey: API_KEY,
       clientId: CLIENT_ID,
       discoveryDocs: DISCOVERY_DOCS,
       scope: SCOPES
-    }).then(function () {
-      // Listen for sign-in state changes.
-      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-      // Handle the initial sign-in state.
-      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-    }, errorFun);
-  }
-
-  let email;
-  $: signedIn = !!email;
-  /**
-   *  Called when the signed in status changes, to update the UI
-   *  appropriately. After a sign-in, the API is called.
-   */
-  function updateSigninStatus(isSignedIn) {
-    past = [];
-    say('');
-    if (isSignedIn) {
-      var auth2 = gapi.auth2.getAuthInstance();
-      var profile = auth2.currentUser.get().getBasicProfile();
-      email = profile.getEmail();
-      say(email);
-    } else {
-      email = undefined;
-      say('sign in for recording');
-    }
-  }
+    }).then(callback, errorFun);
+  }; }
 
   /**
    *  Sign in the user upon button click.
    */
-  function handleAuthClick(event) {
+  handleAuthClick = function(event) {
     gapi.auth2.getAuthInstance().signIn();
   }
 
   /**
    *  Sign out the user upon button click.
    */
-  function handleSignoutClick(event) {
+  handleSignoutClick = function(event) {
     gapi.auth2.getAuthInstance().signOut();
-  }
-
-  function pad2(indent, x) {
-    var str = ''+x
-    if (str.length == 1) {
-      str = indent+str;
-    }
-    return str;
-  }
-
-  function formatDate(d) {
-    const date = new Date(parseInt(d));
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    var s = date.toLocaleDateString(undefined, options);
-    const [hour, minutes] = [date.getHours(), date.getMinutes()];
-    s += ' '+hour+':'+pad2('0', minutes)
-    return s
   }
 
   function fetchFiles() {
@@ -98,8 +68,12 @@
         })
   }
 
-  var past = [];
+  export let past = [];
+  resetPast = function() {
+    past = []
+  }
   function populateHistory(spreadsheetId) {
+    resetPast();
     gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: spreadsheetId,
       range: 'Sheet1',
@@ -107,10 +81,11 @@
       var range = response.result;
       past = range.values;
       say('history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a>');
+      past = past;
     }, errorFun);
   }
 
-  function handleHistoryClick(event) {
+  handleHistoryClick = function(event) {
     fetchFiles().then(function (response) {
       if (!response.result.files || response.result.files.length == 0) {
         say('no history');
@@ -125,7 +100,7 @@
     });
   }
 
-  function handlePublicHistoryClick(event) {
+  handlePublicHistoryClick = function(event) {
     const defaultSpreadsheetId = '1vA8HisdlQW7msL-cPIkDeZPCltDwcVvbc0j9UIX-Z_M';
     const spreadsheetId = prompt('public spreadsheet id', defaultSpreadsheetId);
     if (spreadsheetId == null || spreadsheetId == '') {
@@ -136,7 +111,7 @@
     }
   }
 
-  function handleLineClick(i) {
+  handleLineClick = function(i) {
     return function(event) {
       const line = past[i];
       sayhtml = 'from '+formatDate(line[1]);
@@ -173,7 +148,7 @@
     });
   }
 
-  function handleRecordClick(event) {
+  handleRecordClick = function(event) {
     say('recording in progress...');
     fetchFiles().then(function (response) {
       if (!response.result.files || response.result.files.length == 0) {
@@ -245,6 +220,7 @@
     }
   }
 
+
   let logtext = '';
   /**
    * Append a pre element to the body containing the given message
@@ -252,28 +228,18 @@
    *
    * @param {string} message Text to be placed in pre element.
    */
-  function log(message) {
+  log = function(message) {
     logtext += message + '\n';
   }
 
   let sayhtml = '';
-  function say(message) {
+  say = function(message) {
     sayhtml = message;
   }
-
-  onMount(() => {
-    gapi.load('client:auth2', initClient);
-  })
 </script>
 
-{#if signedIn}
-  <button on:click={handleSignoutClick}>Sign out</button>
-  <button on:click={handleHistoryClick}>History</button>
-  <button on:click={handleRecordClick}>Record</button>
-{:else}
-  <button on:click={handleAuthClick}>Sign in</button>
-  <button on:click={handlePublicHistoryClick}>Public History</button>
-{/if}
+<slot name="user-bar"></slot>
+
 <div>
   <em>{@html sayhtml}</em>
 </div>

@@ -1,7 +1,7 @@
 <script context="module">
   let g;
   let root;
-  export let feelingsIds = [];
+  let feelingsIds = [];
   export function currentFeelings() {
     var values = [];
     g.selectAll('g')
