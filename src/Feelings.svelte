@@ -56,14 +56,17 @@
   }
 
   onMount(async () => {
-    let max_width = 900;
+    let max_dim = 900;
     let width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-    if (width > max_width) {
-      width = max_width;
+    let height = (window.innerHeight > 0) ? window.innerHeight : screen.Height;
+    let dim = (width < height) ? width : height;
+    if (dim > max_dim) {
+      dim = max_dim;
     }
-    let height = width;
-    let bandSize = 150*width/max_width;
-    let fontSize = 18*width/max_width;
+    width = dim;
+    height = dim;
+    let bandSize = 150*dim/max_dim;
+    let fontSize = 18*dim/max_dim;
     let radius = Math.min(width, height) / 2;
 
     // Size our <svg> element, add a <g> element, and move translate 0,0 to the center of the element.
