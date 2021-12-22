@@ -10,7 +10,6 @@
    *  appropriately. After a sign-in, the API is called.
    */
   function updateSigninStatus(isSignedIn) {
-    resetPast();
     say('');
     if (isSignedIn) {
       var auth2 = gapi.auth2.getAuthInstance();
@@ -18,6 +17,7 @@
       email = profile.getEmail();
       say(email);
     } else {
+      resetPast();
       email = undefined;
       say('sign in for recording');
     }

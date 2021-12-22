@@ -81,6 +81,7 @@
       var range = response.result;
       past = range.values;
       say('history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a>');
+      location.hash = prefixSheet+spreadsheetId;
       past = past;
     }, errorFun);
   }
@@ -100,22 +101,21 @@
     });
   }
 
+  const prefixSheet = '#spreadsheet-';
   handlePublicHistoryClick = function(event) {
-    const prefix = '#spreadsheet-';
     let spreadsheetId = '1vA8HisdlQW7msL-cPIkDeZPCltDwcVvbc0j9UIX-Z_M';
     let locationHash = location.hash;
     console.log(locationHash)
-    if (!locationHash.startsWith(prefix)) {
+    if (!locationHash.startsWith(prefixSheet)) {
       spreadsheetId = prompt('public spreadsheet id', spreadsheetId);
     } else {
-      spreadsheetId = locationHash.substring(prefix.length)
+      spreadsheetId = locationHash.substring(prefixSheet.length)
     }
     if (spreadsheetId == null || spreadsheetId == '') {
       say('cancelled');
     } else {
-      say('fetching history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a> ...');
+      say('fetching public history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a> ...');
       populateHistory(spreadsheetId);
-      location.hash = prefix+spreadsheetId;
     }
   }
 
