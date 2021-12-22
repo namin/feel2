@@ -51,8 +51,8 @@
     let emotions = ['Fearful', 'Angry', 'Disgusted', 'Sad', 'Happy', 'Surprised', 'Bad'];
     let m = {};
     let total = 0;
-    for (var j=2; j<feelingsIds.length; j++) {
-      if (line[j] != "0") {
+    for (var j=0; j<feelingsIds.length; j++) {
+      if (line[j+2] != "0") {
         const str = feelingsIds[j];
         const key = str.split("-")[0];
         m[key] = (m[key] || 0) + 1;
@@ -66,7 +66,6 @@
       html += '<span class="color-'+emotion+'">'+percentage+'</span>,';
     }
     html += '</span></span>&nbsp;'
-    console.log(html)
     return html;
   }
 
