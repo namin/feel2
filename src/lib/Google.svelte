@@ -13,7 +13,7 @@
 </script>
 
 <script>
-  import Feelings, { currentFeelings, setFeelings, getFeelings, sparkline } from '$lib/Feelings.svelte';
+  import Feelings, { currentFeelings, setFeelings, sparkline } from '$lib/Feelings.svelte';
   import { formatDate } from '$lib/date.ts';
 
   // Client ID and API key from the Developer Console
@@ -129,7 +129,7 @@
 
   const prefixLine = '#line-';
   handlePublicLineClick = function(event) {
-    const line = getFeelings();
+    const line = currentFeelings();
     const hash = prefixLine+line.join('');
     location.hash = hash;
   }
