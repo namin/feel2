@@ -79,7 +79,13 @@
     }
     let html = '<span class="sparks bar-narrow">'
     for (const emotion of emotions) {
-      const count = (m[emotion] || 0);
+      let count = (m[emotion] || 0);
+      var no_sparks = !!navigator.userAgent.match(/iphone/ig) || false;
+      if (!no_sparks) {
+        // we make sure the count is accurate when sparklines are not supported
+        // otherwise, we have the range 0 to 100
+        count = count*3;
+      }
       html += '<span class="color-'+emotion+'">'+count+'</span>,';
     }
     html += '</span>'
