@@ -69,8 +69,8 @@
     }
     let html = '<span class="sparks bar-narrow">'
     for (const emotion of emotions) {
-      const count = (m[emotion] || 0) + 10;
-      html += '<span class="color-'+emotion+'">'+count*2+'</span>,';
+      const count = (m[emotion] || 0);
+      html += '<span class="color-'+emotion+'">'+count+'</span>,';
     }
     html += '</span>'
     console.log(html)
