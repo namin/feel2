@@ -13,7 +13,7 @@
 </script>
 
 <script>
-  import Feelings, { currentFeelings, setFeelings, sparkline } from '$lib/Feelings.svelte';
+  import Feelings, { feelingsIds, currentFeelings, setFeelings, sparkline } from '$lib/Feelings.svelte';
   import { formatDate } from '$lib/date.ts';
 
   // Client ID and API key from the Developer Console
