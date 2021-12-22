@@ -3,6 +3,6 @@
   import GooglePublic from '$lib/GooglePublic.svelte';
 </script>
 
-<App>
+<App link='/'>
   <GooglePublic/>
 </App>

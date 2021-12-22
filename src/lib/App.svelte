@@ -1,4 +1,14 @@
-<h1><a href="https://github.com/namin/feel2">The Feeling Wheel</a></h1>
+<script>
+  export let link = '';
+</script>
+
+<h1>
+  {#if link}
+    <a href="{link}">The Feeling Wheel</a>
+  {:else}
+    The Feeling Wheel
+  {/if}
+</h1>
 
 <slot></slot>
 
