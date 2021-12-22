@@ -9,6 +9,7 @@ Please [email me](mailto:namin@alum.mit.edu) if you want to be a beta tester for
 - Svelte (just [learning](https://svelte.dev/tutorial/), fun!)
 - D3.js to draw the wheel, based on [chriseyre2000/FeelingWheel](https://github.com/chriseyre2000/FeelingWheel)
 - Google API (all client-side!)
+- [Sparklines Typeface Library](https://github.com/aftertheflood/sparks)
 
 FYI, the command to generate the template for the app was
 ```
