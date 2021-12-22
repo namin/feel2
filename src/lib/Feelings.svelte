@@ -38,6 +38,26 @@
         }
       });
   }
+
+  export function getFeelings() {
+    let j = 2;
+    let line = []
+    g.selectAll('g')
+      .data(root.descendants())
+      .each(function (d) {
+        let id = d.data.id;
+        if (id) {
+          var selNode = this;
+          if (selNode.classList.contains("selected")) {
+            line.push('1');
+          } else {
+            line.push('0');
+          }
+          j += 1;
+        }
+      });
+    return line;
+  }
 </script>
 
 <script>

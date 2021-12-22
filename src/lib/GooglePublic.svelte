@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { say, resetPast, initClient, handleSignoutClick, handlePublicHistoryClick } from '$lib/Google.svelte';
+  import { say, resetPast, initClient, handleSignoutClick, handlePublicHistoryClick, handlePublicLineClick } from '$lib/Google.svelte';
   import Google from '$lib/Google.svelte';
   function updateSigninStatus(isSignedIn) {
     resetPast();
@@ -24,5 +24,6 @@
 <Google>
 <div slot="user-bar">
   <button on:click={handlePublicHistoryClick}>Public History</button>
+  <button on:click={handlePublicLineClick}>Public Line</button>
 </div>
 </Google>

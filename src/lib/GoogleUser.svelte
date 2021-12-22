@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { say, resetPast,initClient, handleAuthClick, handleSignoutClick, handleHistoryClick, handleRecordClick, handlePublicHistoryClick } from '$lib/Google.svelte';
+  import { say, resetPast,initClient, handleAuthClick, handleSignoutClick, handleHistoryClick, handleRecordClick, handlePublicHistoryClick, handlePublicLineClick } from '$lib/Google.svelte';
   import Google from '$lib/Google.svelte';
 
   let email;
@@ -43,6 +43,7 @@
 {:else}
   <button on:click={handleAuthClick}>Sign in</button>
   <button on:click={handlePublicHistoryClick}>Public History</button>
+  <button on:click={handlePublicLineClick}>Public Line</button>
 {/if}
 </div>
 </Google>
