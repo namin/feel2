@@ -59,29 +59,33 @@
     return line;
   }
 
-  export function sparkline(line) {
-    let emotions = ['Fearful', 'Angry', 'Disgusted', 'Sad', 'Happy', 'Surprised', 'Bad'];
-    let m = {}
-    for (var j=2; j<feelingsIds.length; j++) {
-      const str = feelingsIds[j];
-      const key = str.split("-")[0];
-      m[key] = (m[key] || 0) + 1;
-    }
-    let html = '<span class="sparks bar-narrow">'
-    for (const emotion of emotions) {
-      const count = (m[emotion] || 0) + 10;
-      html += '<span class="color-'+emotion+'">'+count*2+'</span>,';
-    }
-    html += '</span>'
-    console.log(html)
-    return html;
-  }
+  export var sparkline;
 </script>
 
 <script>
   import feelings from '$lib/feelings.ts';
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
+
+  sparkline = function(line) {
+    let emotions = ['Fearful', 'Angry', 'Disgusted', 'Sad', 'Happy', 'Surprised', 'Bad'];
+    let m = {}
+    for (var j=2; j<feelingsIds.length; j++) {
+      if (line[j] != "0") {
+        const str = feelingsIds[j];
+        const key = str.split("-")[0];
+        m[key] = (m[key] || 0) + 1;
+      }
+    }
+    let html = '<span class="sparks bar-narrow">'
+    for (const emotion of emotions) {
+      const count = (m[emotion] || 0);
+      html += '<span class="color-'+emotion+'">'+count+'</span>,';
+    }
+    html += '</span>'
+    console.log(html)
+    return html;
+  }
 
   /**
    * Calculate the correct distance to rotate each label based on its location in the sunburst.
