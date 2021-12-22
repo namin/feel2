@@ -37,7 +37,7 @@
       clientId: CLIENT_ID,
       discoveryDocs: DISCOVERY_DOCS,
       scope: SCOPES
-    }).then(callback, errorFun);
+    }).then(function() { callback(); setFeelingsFromHash() }, errorFun);
   }; }
 
   /**
@@ -106,7 +106,6 @@
   handlePublicHistoryClick = function(event) {
     let spreadsheetId = '1vA8HisdlQW7msL-cPIkDeZPCltDwcVvbc0j9UIX-Z_M';
     let locationHash = location.hash;
-    console.log(locationHash)
     if (!locationHash.startsWith(prefixSheet)) {
       spreadsheetId = prompt('public spreadsheet id', spreadsheetId);
     } else {
@@ -132,7 +131,6 @@
   handlePublicLineClick = function(event) {
     const line = getFeelings();
     const hash = prefixLine+line.join('');
-    console.log(hash);
     location.hash = hash;
   }
 
@@ -252,6 +250,14 @@
   let sayhtml = '';
   say = function(message) {
     sayhtml = message;
+  }
+
+  function setFeelingsFromHash() {
+    let hash = location.hash;
+    if (hash.startsWith(prefixLine)) {
+      const line = ('  '+hash.substring(prefixLine.length)).split('');
+      setFeelings(line);
+    }
   }
 </script>
 
