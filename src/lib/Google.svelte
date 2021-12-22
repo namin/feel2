@@ -13,7 +13,7 @@
 </script>
 
 <script>
-  import Feelings, { currentFeelings, setFeelings, getFeelings } from '$lib/Feelings.svelte';
+  import Feelings, { currentFeelings, setFeelings, getFeelings, sparkline } from '$lib/Feelings.svelte';
   import { formatDate } from '$lib/date.ts';
 
   // Client ID and API key from the Developer Console
@@ -280,7 +280,7 @@
   <ol>
   {#each past as line, i}
     {#if i>0}
-      <li><button class="line" on:click={handleLineClick(i)}>{formatDate(line[1])}</button></li>
+      <li><button class="line" on:click={handleLineClick(i)}>{@html sparkline(line)}{formatDate(line[1])}</button></li>
     {/if}
   {/each}
   </ol>
