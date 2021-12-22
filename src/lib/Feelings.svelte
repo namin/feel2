@@ -79,13 +79,13 @@
         total += 1;
       }
     }
-    let html = '<span class="sparks bar-narrow">'
+    let html = '<span class="sparks bar-narrow"><span class="emotion-sparks">'
     for (const emotion of emotions) {
       let count = (m[emotion] || 0);
       let percentage = (total == 0) ? 0 : Math.round(100*count/total);
       html += '<span class="color-'+emotion+'">'+percentage+'</span>,';
     }
-    html += '</span>'
+    html += '</span></span>&nbsp;'
     console.log(html)
     return html;
   }
