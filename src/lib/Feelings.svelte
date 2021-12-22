@@ -69,24 +69,21 @@
 
   sparkline = function(line) {
     let emotions = ['Fearful', 'Angry', 'Disgusted', 'Sad', 'Happy', 'Surprised', 'Bad'];
-    let m = {}
+    let m = {};
+    let total = 0;
     for (var j=2; j<feelingsIds.length; j++) {
       if (line[j] != "0") {
         const str = feelingsIds[j];
         const key = str.split("-")[0];
         m[key] = (m[key] || 0) + 1;
+        total += 1;
       }
     }
     let html = '<span class="sparks bar-narrow">'
     for (const emotion of emotions) {
       let count = (m[emotion] || 0);
-      var no_sparks = !!navigator.userAgent.match(/iphone|ipad/ig) || false;
-      if (!no_sparks) {
-        // we make sure the count is accurate when sparklines are not supported
-        // otherwise, we have the range 0 to 100
-        count = count*3;
-      }
-      html += '<span class="color-'+emotion+'">'+count+'</span>,';
+      let percentage = (total == 0) ? 0 : Math.round(100*count/total);
+      html += '<span class="color-'+emotion+'">'+percentage+'</span>,';
     }
     html += '</span>'
     console.log(html)
