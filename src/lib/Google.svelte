@@ -100,20 +100,22 @@
     });
   }
 
-  let locationHash = '';
   handlePublicHistoryClick = function(event) {
+    const prefix = '#spreadsheet-';
     let spreadsheetId = '1vA8HisdlQW7msL-cPIkDeZPCltDwcVvbc0j9UIX-Z_M';
-    if (!locationHash.startsWith('#spreadsheet-')) {
+    let locationHash = location.hash;
+    console.log(locationHash)
+    if (!locationHash.startsWith(prefix)) {
       spreadsheetId = prompt('public spreadsheet id', spreadsheetId);
     } else {
-      spreadsheetId = locationHash.substring('#spreadsheet-'.length)
+      spreadsheetId = locationHash.substring(prefix.length)
     }
     if (spreadsheetId == null || spreadsheetId == '') {
       say('cancelled');
     } else {
       say('fetching history of '+'<a href="'+spreadsheelUrl(spreadsheetId)+'">spreadsheet</a> ...');
       populateHistory(spreadsheetId);
-      location.hash = spreadsheetId;
+      location.hash = prefix+spreadsheetId;
     }
   }
 
@@ -242,12 +244,7 @@
   say = function(message) {
     sayhtml = message;
   }
-
-  function updateLocationHash() {
-    locationHash = location.hash;
-  }
 </script>
-<svelte:window on:hashchange={updateLocationHash} />
 
 <slot name="user-bar"></slot>
 
