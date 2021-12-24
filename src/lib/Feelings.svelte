@@ -38,12 +38,36 @@
         }
       });
   }
+
+  export var sparkline;
 </script>
 
 <script>
   import feelings from '$lib/feelings.ts';
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
+
+  sparkline = function(line) {
+    let emotions = ['Fearful', 'Angry', 'Disgusted', 'Sad', 'Happy', 'Surprised', 'Bad'];
+    let m = {};
+    let total = 0;
+    for (var j=0; j<feelingsIds.length; j++) {
+      if (line[j+2] != "0") {
+        const str = feelingsIds[j];
+        const key = str.split("-")[0];
+        m[key] = (m[key] || 0) + 1;
+        total += 1;
+      }
+    }
+    let html = '<span class="sparks bar-narrow"><span class="emotion-sparks">'
+    for (const emotion of emotions) {
+      let count = (m[emotion] || 0);
+      let percentage = (total == 0) ? 0 : Math.round(100*count/total);
+      html += '<span class="color-'+emotion+'">'+percentage+',</span>';
+    }
+    html += '</span></span>&nbsp;'
+    return html;
+  }
 
   /**
    * Calculate the correct distance to rotate each label based on its location in the sunburst.

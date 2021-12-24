@@ -13,9 +13,8 @@
 </script>
 
 <script>
-  import Feelings, { feelingsIds, currentFeelings, setFeelings } from '$lib/Feelings.svelte';
+  import Feelings, { feelingsIds, currentFeelings, setFeelings, sparkline } from '$lib/Feelings.svelte';
   import { formatDate } from '$lib/date.ts';
-  import Sparkline from '$lib/Sparkline.svelte';
 
   // Client ID and API key from the Developer Console
   var CLIENT_ID = '45515854863-6imu2cteovr1j804j404auhh70nmlihh.apps.googleusercontent.com';
@@ -281,7 +280,7 @@
   <ol>
   {#each past as line, i}
     {#if i>0}
-      <li><button class="line" on:click={handleLineClick(i)}><Sparkline line="{line}"/>{formatDate(line[1])}</button></li>
+      <li><button class="line" on:click={handleLineClick(i)}>{@html sparkline(line)}{formatDate(line[1])}</button></li>
     {/if}
   {/each}
   </ol>
