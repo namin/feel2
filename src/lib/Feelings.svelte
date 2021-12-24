@@ -63,7 +63,7 @@
     for (const emotion of emotions) {
       let count = (m[emotion] || 0);
       let percentage = (total == 0) ? 0 : Math.round(100*count/total);
-      html += '<span class="color-'+emotion+'">'+percentage+'</span>,';
+      html += '<span class="color-'+emotion+'">'+percentage+',</span>';
     }
     html += '</span></span>&nbsp;'
     return html;
