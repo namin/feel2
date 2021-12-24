@@ -26,8 +26,4 @@
   });
 </script>
 
-<span class="sparks bar-narrow"><span class="emotion-sparks">
-    {#each sparks as spark}
-      <span class="color-{spark.emotion}">{spark.percentage},</span>
-    {/each}
-</span></span>&nbsp;
+<span class="sparks bar-narrow"><span class="emotion-sparks">{#each sparks as spark}<span class="color-{spark.emotion}">{spark.percentage},</span>{/each}</span></span>&nbsp;
