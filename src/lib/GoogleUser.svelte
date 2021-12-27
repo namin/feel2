@@ -39,6 +39,7 @@
 {#if signedIn}
   <button on:click={handleSignoutClick}>Sign out</button>
   <button on:click={handleHistoryClick}>History</button>
+  <button on:click={handlePublicLineClick}>Public Line</button>
   <button on:click={handleRecordClick}>Record</button>
 {:else}
   <button on:click={handleAuthClick}>Sign in</button>
