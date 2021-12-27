@@ -32,12 +32,13 @@
    *  listeners.
    */
   initClient = function(callback) { return function() {
+    setFeelingsFromHash();
     gapi.client.init({
       apiKey: API_KEY,
       clientId: CLIENT_ID,
       discoveryDocs: DISCOVERY_DOCS,
       scope: SCOPES
-    }).then(function() { callback(); setFeelingsFromHash() }, errorFun);
+    }).then(callback, errorFun);
   }; }
 
   /**
