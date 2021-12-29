@@ -173,6 +173,8 @@
           feelingsIds.push(id)
         }
       })
+
+    setFeelingsFromHash();
   });
 </script>
 
