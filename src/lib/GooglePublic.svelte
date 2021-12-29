@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
-  import { say, resetPast, initClient, handleSignoutClick, handlePublicHistoryClick, handlePublicLineClick } from '$lib/Google.svelte';
+  import { handlePublicLineClick } from '$lib/Feelings.svelte';
+  import { say, resetPast, initClient, handleSignoutClick, handlePublicHistoryClick } from '$lib/Google.svelte';
   import Google from '$lib/Google.svelte';
   function updateSigninStatus(isSignedIn) {
     resetPast();

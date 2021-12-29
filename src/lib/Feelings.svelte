@@ -39,6 +39,21 @@
       });
   }
 
+  const prefixLine = '#line-';
+  export function setFeelingsFromHash() {
+    let hash = location.hash;
+    if (hash.startsWith(prefixLine)) {
+      const line = ('  '+hash.substring(prefixLine.length)).split('');
+      setFeelings(line);
+    }
+  }
+
+  export function handlePublicLineClick(event) {
+    const line = currentFeelings();
+    const hash = prefixLine+line.join('');
+    location.hash = hash;
+  }
+
   export var sparkline;
 </script>
 

@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
-  import { say, resetPast,initClient, handleAuthClick, handleSignoutClick, handleHistoryClick, handleRecordClick, handlePublicHistoryClick, handlePublicLineClick } from '$lib/Google.svelte';
+  import { handlePublicLineClick } from '$lib/Feelings.svelte';
+  import { say, resetPast,initClient, handleAuthClick, handleSignoutClick, handleHistoryClick, handleRecordClick, handlePublicHistoryClick } from '$lib/Google.svelte';
   import Google from '$lib/Google.svelte';
 
   let email;

@@ -5,7 +5,6 @@
   export var handleHistoryClick;
   export var handlePublicHistoryClick;
   export var handleLineClick;
-  export var handlePublicLineClick;
   export var handleRecordClick;
   export var resetPast;
   export var log;
@@ -13,7 +12,7 @@
 </script>
 
 <script>
-  import Feelings, { feelingsIds, currentFeelings, setFeelings, sparkline } from '$lib/Feelings.svelte';
+  import Feelings, { feelingsIds, currentFeelings, setFeelings, setFeelingsFromHash, sparkline } from '$lib/Feelings.svelte';
   import { formatDate } from '$lib/date.ts';
 
   // Client ID and API key from the Developer Console
@@ -126,13 +125,6 @@
       sayhtml = 'from '+formatDate(line[1]);
       setFeelings(line);
     };
-  }
-
-  const prefixLine = '#line-';
-  handlePublicLineClick = function(event) {
-    const line = currentFeelings();
-    const hash = prefixLine+line.join('');
-    location.hash = hash;
   }
 
   function createSpreadsheet() {
@@ -251,14 +243,6 @@
   let sayhtml = '';
   say = function(message) {
     sayhtml = message;
-  }
-
-  function setFeelingsFromHash() {
-    let hash = location.hash;
-    if (hash.startsWith(prefixLine)) {
-      const line = ('  '+hash.substring(prefixLine.length)).split('');
-      setFeelings(line);
-    }
   }
 </script>
 
