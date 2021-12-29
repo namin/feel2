@@ -262,6 +262,10 @@
   }
 </script>
 
+<svelte:head>
+  <script src="https://apis.google.com/js/api.js"></script>
+</svelte:head>
+
 <slot name="user-bar"></slot>
 
 <div>
