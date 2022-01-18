@@ -39,11 +39,6 @@
       });
   }
 
-  function convert(value, radix) {
-    return [...value.toString()]
-      .reduce((r, v) => r * BigInt(radix) + BigInt(parseInt(v, radix)), 0n);
-  }
-
   const prefixLine = '#line-';
   const prefixCut = '#cut-';
   export function setFeelingsFromHash() {
@@ -53,7 +48,7 @@
       setFeelings(line);
     } else if (hash.startsWith(prefixCut)) {
       const cut = hash.substring(prefixCut.length);
-      const lineStr = convert(cut, 36).toString(2).padStart(feelingsIds.length, '0');
+      const lineStr = BigInt('0x'+cut).toString(2).padStart(feelingsIds.length, '0');
       const line = ('  '+lineStr).split('');
       setFeelings(line);
     }
@@ -67,7 +62,7 @@
 
   export function handlePublicCutClick(event) {
     const line = currentFeelings();
-    const cut = convert(line.join(''), 2).toString(36);
+    const cut = BigInt("0b"+line.join('')).toString(16);
     const hash = prefixCut+cut;
     location.hash = hash;
   }
