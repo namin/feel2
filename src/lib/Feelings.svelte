@@ -39,11 +39,22 @@
       });
   }
 
+  function convert(value, radix) {
+    return [...value.toString()]
+      .reduce((r, v) => r * BigInt(radix) + BigInt(parseInt(v, radix)), 0n);
+  }
+
   const prefixLine = '#line-';
+  const prefixCut = '#cut-';
   export function setFeelingsFromHash() {
     let hash = location.hash;
     if (hash.startsWith(prefixLine)) {
       const line = ('  '+hash.substring(prefixLine.length)).split('');
+      setFeelings(line);
+    } else if (hash.startsWith(prefixCut)) {
+      const cut = hash.substring(prefixCut.length);
+      const lineStr = convert(cut, 36).toString(2).padStart(feelingsIds.length, '0');
+      const line = ('  '+lineStr).split('');
       setFeelings(line);
     }
   }
@@ -51,6 +62,13 @@
   export function handlePublicLineClick(event) {
     const line = currentFeelings();
     const hash = prefixLine+line.join('');
+    location.hash = hash;
+  }
+
+  export function handlePublicCutClick(event) {
+    const line = currentFeelings();
+    const cut = convert(line.join(''), 2).toString(36);
+    const hash = prefixCut+cut;
     location.hash = hash;
   }
 

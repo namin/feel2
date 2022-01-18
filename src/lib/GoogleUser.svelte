@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { handlePublicLineClick } from '$lib/Feelings.svelte';
+  import { handlePublicCutClick } from '$lib/Feelings.svelte';
   import { say, resetPast,initClient, handleAuthClick, handleSignoutClick, handleHistoryClick, handleRecordClick, handlePublicHistoryClick } from '$lib/Google.svelte';
   import Google from '$lib/Google.svelte';
 
@@ -40,12 +40,12 @@
 {#if signedIn}
   <button on:click={handleSignoutClick}>Sign out</button>
   <button on:click={handleHistoryClick}>History</button>
-  <button on:click={handlePublicLineClick}>Public Line</button>
+  <button on:click={handlePublicCutClick}>Public Cut</button>
   <button on:click={handleRecordClick}>Record</button>
 {:else}
   <button on:click={handleAuthClick}>Sign in</button>
   <button on:click={handlePublicHistoryClick}>Public History</button>
-  <button on:click={handlePublicLineClick}>Public Line</button>
+  <button on:click={handlePublicCutClick}>Public Cut</button>
 {/if}
 </div>
 </Google>

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { handlePublicLineClick } from '$lib/Feelings.svelte';
+  import { handlePublicCutClick } from '$lib/Feelings.svelte';
   import { say, resetPast, initClient, handleSignoutClick, handlePublicHistoryClick } from '$lib/Google.svelte';
   import Google from '$lib/Google.svelte';
   function updateSigninStatus(isSignedIn) {
@@ -25,6 +25,6 @@
 <Google>
 <div slot="user-bar">
   <button on:click={handlePublicHistoryClick}>Public History</button>
-  <button on:click={handlePublicLineClick}>Public Line</button>
+  <button on:click={handlePublicCutClick}>Public Cut</button>
 </div>
 </Google>
