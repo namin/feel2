@@ -193,7 +193,7 @@
       majorDimension: 'ROWS',
       values: values
     }).then((response) => {
-      say('recorded on '+formatDate(values[values.length-1][1])+' to <a href="'+spreadsheelUrl(spreadsheetId)+'" target="_blank">spreadsheet</a>')
+      say(sparkline(values[values.length-1])+' recorded on '+formatDate(values[values.length-1][1])+' to <a href="'+spreadsheelUrl(spreadsheetId)+'" target="_blank">spreadsheet</a>')
     }, function(response) {
       if (response.result.error.code == 404) {
         log('spreadsheet not found!')
