@@ -121,7 +121,7 @@
   handleLineClick = function(i) {
     return function(event) {
       const line = past[i];
-      sayhtml = 'from '+formatDate(line[1]);
+      sayhtml = sparkline(line)+' from '+formatDate(line[1]);
       setFeelings(line);
     };
   }
